@@ -5,7 +5,7 @@ import OurPolicy from "@/components/OurPolicy";
 
 export default function Home() {
   return (
-    <div className="pt-10 ">
+    <div className="pt-6 ">
       <Hero />
       <LatestCollection />
       <BestSeller />

@@ -11,7 +11,7 @@ const Navbar = () => {
     const path = usePathname()
 
     return (
-        <div className='flex items-center justify-between'>
+        <div className={`flex items-center justify-between ${path == '/'? '': 'border-b pb-6'}`}>
             <Link href={'/'}><h1 className='font-bold text-xl'>eShop</h1></Link>
             
             <ul className='hidden sm:flex items-center gap-6 text-sm font-medium'>
@@ -73,6 +73,7 @@ const Navbar = () => {
                     <li >CONTACT</li>
                 </Link>
             </ul>
+
         </div>
     )
 }
