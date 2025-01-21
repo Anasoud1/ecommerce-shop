@@ -12,7 +12,8 @@ const Navbar = () => {
 
     return (
         <div className='flex items-center justify-between'>
-            <h1 className='font-bold text-xl'>eShop</h1>
+            <Link href={'/'}><h1 className='font-bold text-xl'>eShop</h1></Link>
+            
             <ul className='hidden sm:flex items-center gap-6 text-sm font-medium'>
                 <Link href={'/'} className='flex flex-col items-center'>
                     <li >HOME</li>
