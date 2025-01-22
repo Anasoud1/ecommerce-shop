@@ -46,7 +46,7 @@ const Navbar = () => {
                     <div className='group-hover:block hidden dropdown-menu absolute right-0 '>
                         <ul className='border bg-gray-100 mt-4 w-36 px-4 py-2 flex flex-col gap-y-2'>
                             <li>Profile</li>
-                            <li>My orders</li>
+                            <Link href='/myorders'><li>My orders</li></Link>
                             <li>Logout</li>
                         </ul>
                     </div>
