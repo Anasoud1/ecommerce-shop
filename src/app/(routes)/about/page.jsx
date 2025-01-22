@@ -5,7 +5,10 @@ import React from 'react'
 const About = () => {
   return (
     <div className='pt-10 '>
-      <Title text1={'ABOUT'} text2={'US'}/>
+      <div className='flex justify-center'>
+        <Title text1={'ABOUT'} text2={'US'}/>
+      </div>
+      
       <div className='pt-16 w-full xl:w-[80%] mx-auto flex flex-col lg:flex-row items-center gap-y-16 xl:gap-x-32 lg:gap-x-20'>
         <Image src={'/about.jpg'} width={300} height={200} alt='about'/>
         <div className='flex flex-col gap-y-6'>

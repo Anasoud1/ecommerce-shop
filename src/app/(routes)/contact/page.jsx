@@ -5,7 +5,9 @@ import React from 'react'
 const Contact = () => {
   return (
     <div className='pt-10'>
-      <Title text1={'CONTACT'} text2={'US'}/>
+      <div className='flex justify-center'>
+        <Title text1={'CONTACT'} text2={'US'}/>
+      </div>
       <div className='flex flex-col md:flex-row gap-20 pt-16 lg:w-[80%] lg:mx-auto justify-center'>
         <Image className='w-full flex-1' src={'/contact.jpg'} width={300} height={300} alt='contact'/>
         <div className='flex-1'>
