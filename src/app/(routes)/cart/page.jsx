@@ -1,9 +1,15 @@
+'use client'
+import CartTotal from '@/components/CartTotal'
 import Title from '@/components/Title'
-import { Trash, Trash2Icon } from 'lucide-react'
+import { Trash2Icon } from 'lucide-react'
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 import React from 'react'
 
 const Cart = () => {
+
+  const router = useRouter()
+
   return (
     <div className='pt-10'>
       <Title text1={'YOUR'} text2={'CART'} />
@@ -43,23 +49,9 @@ const Cart = () => {
       {/* ------- Cart Total ------- */}
       <div className='pt-16 flex justify-end'>
         <div className='w-full sm:max-w-[450px]'>
-          <Title text1={'CART'} text2={'TOTAL'} />
-          <div className='pt-6 text-sm'>
-            <div className='flex justify-between gap-6 border-b pb-2'>
-              <p>SubTotal</p>
-              <p>MAD 200.00</p>
-            </div>
-            <div className='flex justify-between gap-6 border-b py-2'>
-              <p>Shipping Fee</p>
-              <p>MAD 10.00</p>
-            </div>
-            <div className='flex justify-between gap-6 font-bold py-2'>
-              <p>Total</p>
-              <p>MAD 210.00</p>
-            </div>
-          </div>
+          <CartTotal />
           <div className='flex justify-end pt-6'>
-            <button className='py-3 px-8 bg-black text-white text-sm'>PROCEED TO CHECKOUT</button>
+            <button onClick={() => router.push('/place-order')} className='py-3 px-8 bg-black text-white text-sm'>PROCEED TO CHECKOUT</button>
           </div>
         </div>
 
