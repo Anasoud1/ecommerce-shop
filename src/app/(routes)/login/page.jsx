@@ -1,9 +1,55 @@
 'use client'
-import React, { useState } from 'react'
+import { ShopContext } from '@/app/(context)/ShopContext'
+import axios from 'axios'
+import { useRouter } from 'next/navigation'
+import React, { useContext, useEffect, useState } from 'react'
+import { toast } from 'react-toastify'
 
 const Login = () => {
 
+    const {token, setToken, backendUrl} = useContext(ShopContext)
+    
     const [login, setLogin] = useState('login')
+    const [name, setName] = useState('')
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+
+    const router = useRouter()
+
+
+
+    const handleLogin = async (e) => {
+        try {
+            e.preventDefault()
+            let res
+            if (login == 'login'){
+                res = await axios.post(backendUrl + '/api/user/login', {name, email, password})
+
+            } else {
+                res = await axios.post(backendUrl + '/api/user/register', {name, email, password})
+
+            }
+            console.log(res.data)
+
+            if (res.data.success){
+                setToken(res.data.token)
+                localStorage.setItem('token', res.data.token)
+                
+            } else {
+                toast.error(res.data.message)
+            }
+
+        } catch (error) {
+            console.log(error)
+            toast.error(error.message)
+        }
+    }
+
+    useEffect(() => {
+        if (token){
+            router.push('/')
+        }
+    }, [token])
 
     return (
         <div className='flex justify-center items-center pt-24'>
@@ -13,10 +59,10 @@ const Login = () => {
                     {login === 'sign up' && <h2>Sign Up</h2>}
                     <hr className='border-0.5 border-black w-10'/>
                 </div>
-                <form action="" className='flex flex-col py-6 gap-3'>
-                    {login === 'sign up' && <input type="text" placeholder='Full name' className='border border-black px-4 py-2' />}
-                    <input type="text" placeholder='Email' className='border border-black px-4 py-2' />
-                    <input type="password" placeholder='Password' className='border border-black px-4 py-2' />
+                <form onSubmit={handleLogin} className='flex flex-col py-6 gap-3'>
+                    {login === 'sign up' && <input type="text" placeholder='Full name' name='name' value={name} onChange={(e) => setName(e.target.value)} className='border border-black px-4 py-2' />}
+                    <input type="text" placeholder='Email' name='email' value={email} onChange={(e) => setEmail(e.target.value)} className='border border-black px-4 py-2' />
+                    <input type="password" placeholder='Password' name='password' value={password} onChange={(e) => setPassword(e.target.value)} className='border border-black px-4 py-2' />
                     <div className='flex justify-between text-sm'>
                         <p>Forgot your password</p>
                         

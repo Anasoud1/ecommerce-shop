@@ -7,11 +7,15 @@ import { toast } from 'react-toastify'
 export const ShopContext = createContext()
 
 const ShopContextProvider = (props) => {
-    
 
     const currency = "MAD"
     const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL
     const [products, setProducts] = useState([])
+    const [token , setToken] = useState(localStorage.getItem('token'))
+
+
+    
+
 
 
     const getProductsData = async () => {
@@ -37,7 +41,10 @@ const ShopContextProvider = (props) => {
         getProductsData()
     }, [])
 
-    const value = {products, currency}
+    const value = {
+        products, currency,
+        token, setToken, backendUrl
+    }
 
 
   return (products.length > 0 ?

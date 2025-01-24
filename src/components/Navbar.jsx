@@ -1,15 +1,24 @@
 'use client'
+import { ShopContext } from '@/app/(context)/ShopContext'
 import { AlignRight, ChevronLeft, Search, X } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 
 const Navbar = () => {
 
     const [visible, setVisible] = useState(false)
     const [searchBar, setSearchBar] = useState(false)
     const path = usePathname()
+
+    const {token, setToken} = useContext(ShopContext)
+
+    const handleLogout = () => {
+        localStorage.clear()
+        setToken(null)
+
+    }
 
     return (
         <div>
@@ -45,17 +54,20 @@ const Navbar = () => {
                         <p className='absolute bg-black text-white bottom-[-5px] right-[-5px] rounded-full w-4 text-center aspect-square leading-4 text-[8px]'>10</p>
                     </Link>
 
-
-                    <div className='group relative cursor-pointer'>
+                    {!token && <Link href={'/login'}>
+                        <button className='px-5 py-2 bg-black text-white rounded-full'>Login</button>
+                    </Link>}
+                    
+                    {token && <div className='group relative cursor-pointer'>
                         <Image src={'/user.png'} width={20} height={20} alt='user' />
                         <div className='group-hover:block hidden dropdown-menu absolute right-0 '>
                             <ul className='border bg-gray-100 mt-4 w-36 px-4 py-2 flex flex-col gap-y-2'>
-                                <li>Profile</li>
-                                <Link href='/myorders'><li>My orders</li></Link>
-                                <li>Logout</li>
+                                <li className='hover:font-semibold' >Profile</li>
+                                <Link href='/myorders'><li className='hover:font-semibold'>My orders</li></Link>
+                                <li className='hover:font-semibold' onClick={() => handleLogout()}>Logout</li>
                             </ul>
                         </div>
-                    </div>
+                    </div>}
                     <AlignRight onClick={() => setVisible(true)} className='block sm:hidden cursor-pointer' />
 
 
