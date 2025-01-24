@@ -8,14 +8,14 @@ import ShopContextProvider from "./(context)/ShopContext";
 
 export default function RootLayout({ children }) {
   return (
-    <ShopContextProvider>
-      <html lang="en">
-        <body className="px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw] py-6">
+    <html lang="en">
+      <body className="px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw] py-6">
+        <ShopContextProvider>
           <Navbar />
           {children}
           <Footer />
-        </body>
-      </html>
-    </ShopContextProvider>
+        </ShopContextProvider>
+      </body>
+    </html>
   );
 }

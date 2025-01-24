@@ -40,10 +40,10 @@ const ShopContextProvider = (props) => {
     const value = {products, currency}
 
 
-  return (
+  return (products.length > 0 ?
     <ShopContext.Provider value={value}>
         {props.children}
-    </ShopContext.Provider>
+    </ShopContext.Provider> : null
   )
 }
 
