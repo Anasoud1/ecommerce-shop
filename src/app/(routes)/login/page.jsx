@@ -29,7 +29,6 @@ const Login = () => {
                 res = await axios.post(backendUrl + '/api/user/register', {name, email, password})
 
             }
-            console.log(res.data)
 
             if (res.data.success){
                 setToken(res.data.token)

@@ -4,6 +4,7 @@ import Title from '@/components/Title'
 import Image from 'next/image'
 import { useParams, useRouter } from 'next/navigation'
 import React, { useContext, useEffect, useState } from 'react'
+import { toast } from 'react-toastify'
 
 const Product = () => {
 
@@ -11,11 +12,11 @@ const Product = () => {
     const params = useParams()
     const productId = params.id
 
-    const { products, currency } = useContext(ShopContext)
+    const { products, currency, addToCart } = useContext(ShopContext)
 
     const [product, setProduct] = useState(false)
     const [image, setImage] = useState('')
-    const [size, setSize] = useState([])
+    const [size, setSize] = useState()
     const [relatedProduct, setRelatedProduct] = useState([])
     const router = useRouter()
 
@@ -29,6 +30,15 @@ const Product = () => {
             }
         })
 
+    }
+
+    const handleAddToCart = () => {
+        if (!size){
+            toast('Select size')
+        } else {
+            addToCart(productId, size)
+        }
+        // console.log('size: ', size)
     }
 
     useEffect(() => {
@@ -98,7 +108,7 @@ const Product = () => {
                         </div>
                     </div>
                     <div>
-                        <button className='bg-black text-white px-8 py-3 text-sm'>ADD TO CART</button>
+                        <button onClick={handleAddToCart} className='bg-black text-white px-8 py-3 text-sm'>ADD TO CART</button>
                     </div>
 
                     <hr className='w-full border' />

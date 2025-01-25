@@ -4,7 +4,7 @@ import { AlignRight, ChevronLeft, Search, X } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 
 const Navbar = () => {
 
@@ -12,13 +12,14 @@ const Navbar = () => {
     const [searchBar, setSearchBar] = useState(false)
     const path = usePathname()
 
-    const {token, setToken} = useContext(ShopContext)
+    const {token, setToken, totalItems} = useContext(ShopContext)
 
     const handleLogout = () => {
         localStorage.clear()
         setToken(null)
 
     }
+
 
     return (
         <div>
@@ -51,7 +52,7 @@ const Navbar = () => {
                     <Image src={'/search.png'} width={20} height={20} alt='search' onClick={() => setSearchBar(true)} className='cursor-pointer'/>
                     <Link href={'/cart'} className='cursor-pointer relative'>
                         <Image src={'/cart.png'} width={20} height={20} alt='cart' />
-                        <p className='absolute bg-black text-white bottom-[-5px] right-[-5px] rounded-full w-4 text-center aspect-square leading-4 text-[8px]'>10</p>
+                        <p className='absolute bg-black text-white bottom-[-5px] right-[-5px] rounded-full w-4 text-center aspect-square leading-4 text-[8px]'>{totalItems}</p>
                     </Link>
 
                     {!token && <Link href={'/login'}>

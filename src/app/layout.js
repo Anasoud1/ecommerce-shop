@@ -12,7 +12,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className="px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw] py-6">
         <ShopContextProvider>
-          <ToastContainer/>
+          <ToastContainer position="bottom-right"/>
           <Navbar />
           {children}
           <Footer />
