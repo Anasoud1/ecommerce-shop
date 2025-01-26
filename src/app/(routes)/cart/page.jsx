@@ -5,15 +5,15 @@ import Title from '@/components/Title'
 import { Trash2Icon } from 'lucide-react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 
 const Cart = () => {
 
-  const { cartList, currency } = useContext(ShopContext)
+  const { cartList, currency, updateCart, deleteProduct, totalAmount, delivery_fee } = useContext(ShopContext)
 
   const router = useRouter()
 
-  // console.log(cartList)
+  
 
   return (
     <div className='pt-10'>
@@ -36,8 +36,8 @@ const Cart = () => {
                 </div>
               </div>
             </div>
-            <input type="number" defaultValue={item.quantity} value={item.quantity} className='border w-[40px] md:w-[80px] h-[30px] pl-2' />
-            <Trash2Icon size={20} className='cursor-pointer' />
+            <input type="number" min={1} defaultValue={item.quantity} onChange={(e) => Number(e.target.value) === 0 ? null : updateCart(item._id, item.size, Number(e.target.value) )} className='border w-[40px] md:w-[80px] h-[30px] pl-2' />
+            <Trash2Icon onClick={() => deleteProduct(item._id, item.size)} size={20} className='cursor-pointer' />
           </div>
         ))}
 
@@ -48,7 +48,7 @@ const Cart = () => {
       {/* ------- Cart Total ------- */}
       <div className='pt-16 flex justify-end'>
         <div className='w-full sm:max-w-[450px]'>
-          <CartTotal />
+          <CartTotal totalAmount={totalAmount} currency={currency} delivery_fee={delivery_fee}/>
           <div className='flex justify-end pt-6'>
             <button onClick={() => router.push('/place-order')} className='py-3 px-8 bg-black text-white text-sm'>PROCEED TO CHECKOUT</button>
           </div>

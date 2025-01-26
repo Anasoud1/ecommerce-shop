@@ -9,6 +9,7 @@ export const ShopContext = createContext()
 const ShopContextProvider = (props) => {
 
     const currency = "MAD"
+    const delivery_fee = 10
     const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL
     const [products, setProducts] = useState([])
     const [token, setToken] = useState(null)
@@ -17,6 +18,8 @@ const ShopContextProvider = (props) => {
     const [totalItems, setTotalItems] = useState(0)
     const [updateCartCount, setUpdateCartCount] = useState(false)
     const [cartList, setCartList] = useState([])
+    const [totalAmount, setTotalAmount] = useState(0)
+    
 
 
     const getProductsData = async () => {
@@ -50,26 +53,33 @@ const ShopContextProvider = (props) => {
 
     const createNewListCart = (cartData) => {
         let cartList = []
+        let countTotal = 0
 
         // console.log(products)
 
 
-        for (const itemId in cartData){
-            for (const itemSize in cartData[itemId]){
+        for (const itemId in cartData) {
+            for (const itemSize in cartData[itemId]) {
                 const singleProduct = products.find(el => el._id === itemId)
-                cartList.push({
-                    'name': singleProduct.name,
-                    'price': singleProduct.price,
-                    'image': singleProduct.image[0],
-                    'size': itemSize,
-                    'quantity': cartData[itemId][itemSize]
-                })
+                if (cartData[itemId][itemSize] > 0) {
+                    cartList.push({
+                        '_id': itemId,
+                        'name': singleProduct.name,
+                        'price': singleProduct.price,
+                        'image': singleProduct.image[0],
+                        'size': itemSize,
+                        'quantity': cartData[itemId][itemSize]
+                    })
+                    countTotal += cartData[itemId][itemSize] * singleProduct.price
+                }
+
             }
         }
+        setTotalAmount(countTotal)
 
         return cartList
 
-    } 
+    }
 
     const getCartUser = async (token) => {
         try {
@@ -78,7 +88,7 @@ const ShopContextProvider = (props) => {
             if (res.data.success) {
                 setCartItems(res.data.cartData)
                 setTotalItems(getCartLength(res.data.cartData))
-                if (products.length > 0){
+                if (products.length > 0) {
                     setCartList(createNewListCart(res.data.cartData))
 
                 }
@@ -96,13 +106,72 @@ const ShopContextProvider = (props) => {
 
             setUpdateCartCount(!updateCartCount)
             toast(res.data.message)
-
         } catch (error) {
             console.log(error)
             toast.error(error.message)
         }
     }
 
+
+    const updateCart = async (itemId, size, quantity) => {
+        try {
+            const res = await axios.post(backendUrl + '/api/cart/update', { itemId, size, quantity }, { headers: { token } })
+
+            if (res.data.success) {
+                setUpdateCartCount(!updateCartCount)
+
+                toast(res.data.message)
+            } else {
+                toast.error(res.data.message)
+
+            }
+        } catch (error) {
+            console.log(error)
+            toast.error(error.message)
+        }
+    }
+
+    const deleteProduct = async (itemId, size) => {
+        try {
+
+            let newCartData = structuredClone(cartItems)
+
+            for (const id in newCartData) {
+
+                if (id === itemId) {
+                    if (Object.keys(newCartData[id]).length === 1) {
+                        delete newCartData[id]
+                    } else {
+                        delete newCartData[id][size]
+                    }
+                    break;
+                }
+
+            }
+
+            const res = await axios.post(backendUrl + '/api/cart/delete', {newCartData}, { headers: { token } })
+
+            console.log('res data: ', res.data)
+            if (res.data.success) {
+                setCartItems(newCartData)
+                if (products.length > 0) {
+                    setCartList(createNewListCart(res.data.cartData))
+
+                }
+
+                setUpdateCartCount(!updateCartCount)
+                toast(res.data.message)
+            } else {
+                toast.error(res.data.message)
+                console.log(res.data.message)
+
+            }
+
+        } catch (error) {
+            console.log(error)
+            toast.error(error.message)
+        }
+    }
 
     useEffect(() => {
         getProductsData()
@@ -125,16 +194,17 @@ const ShopContextProvider = (props) => {
 
     }, [token, updateCartCount, products])
 
-    
+
 
 
 
 
     const value = {
-        products, currency,
+        products, currency, delivery_fee,
         token, setToken, backendUrl,
         addToCart, totalItems, cartItems, getCartUser,
-        updateCartCount, cartList,
+        updateCartCount, cartList, updateCart, deleteProduct,
+        totalAmount,
     }
 
 
