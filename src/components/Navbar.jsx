@@ -3,7 +3,8 @@ import { ShopContext } from '@/app/(context)/ShopContext'
 import { AlignRight, ChevronLeft, Search, X } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
+
 import React, { useContext, useEffect, useState } from 'react'
 
 const Navbar = () => {
@@ -11,14 +12,21 @@ const Navbar = () => {
     const [visible, setVisible] = useState(false)
     const [searchBar, setSearchBar] = useState(false)
     const path = usePathname()
+    const router = useRouter()
 
     const {token, setToken, totalItems} = useContext(ShopContext)
 
     const handleLogout = () => {
         localStorage.clear()
         setToken(null)
+        console.log(path)
 
     }
+    useEffect(() => {
+        if (!token && ['/cart', '/place-order', '/myorders'].includes(path)){
+            router.push('/login')
+        }
+    }, [token])
 
 
     return (

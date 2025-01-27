@@ -3,7 +3,7 @@ import React from 'react'
 
 const OurPolicy = () => {
   return (
-    <div className='grid grid-cols-1 md:grid-cols-3 gap-8 pt-[160px] pb-20 text-sm md:text-base'>
+    <div className='grid grid-cols-1 md:grid-cols-3 gap-y-12 md:gap-8 pt-[160px] pb-20 text-sm md:text-base'>
         <div className='flex flex-col gap-y-2 items-center'>
             <Image src={'/exchange.png'} width={40} height={40} alt='exchange'/>
             <h5 className='font-semibold'>Easy Exchange Policy</h5>

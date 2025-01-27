@@ -1,5 +1,6 @@
 'use client'
 import axios from 'axios'
+import { useRouter } from 'next/navigation'
 import React, { createContext, useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 
@@ -19,6 +20,11 @@ const ShopContextProvider = (props) => {
     const [updateCartCount, setUpdateCartCount] = useState(false)
     const [cartList, setCartList] = useState([])
     const [totalAmount, setTotalAmount] = useState(0)
+
+    const [ordersItems, setOrdersItems] = useState([])
+
+    const [loading, setLoading] = useState(false);
+    const router = useRouter()
     
 
 
@@ -36,6 +42,8 @@ const ShopContextProvider = (props) => {
             console.log(error)
             toast.error(error.message)
 
+        } finally {
+            setLoading(false);
         }
     }
 
@@ -131,6 +139,26 @@ const ShopContextProvider = (props) => {
         }
     }
 
+
+    const clearCart = async () => {
+        try {
+            const res = await axios.post(backendUrl + '/api/cart/clearCart', {}, { headers: { token } })
+
+            console.log('res data: ', res.data)
+            if (res.data.success) {
+                setCartList([])
+                setCartItems({})
+                setTotalItems(0)
+
+                setUpdateCartCount(!updateCartCount)
+            }
+
+        } catch (error) {
+            console.log(error)
+            toast.error(error.message)
+        }
+    }
+
     const deleteProduct = async (itemId, size) => {
         try {
 
@@ -151,7 +179,6 @@ const ShopContextProvider = (props) => {
 
             const res = await axios.post(backendUrl + '/api/cart/delete', {newCartData}, { headers: { token } })
 
-            console.log('res data: ', res.data)
             if (res.data.success) {
                 setCartItems(newCartData)
                 if (products.length > 0) {
@@ -173,30 +200,107 @@ const ShopContextProvider = (props) => {
         }
     }
 
-    useEffect(() => {
-        getProductsData()
+    const placeOrder = async (items, address, amount) => {
+        try {
+            const res = await axios.post(backendUrl + '/api/order/place', {items, address, amount}, {headers: {token}})
 
-    }, [])
+            // console.log(res.data)
+
+            if (res.data.success){
+                await clearCart()
+                router.push('/myorders')
+                
+                toast(res.data.message)
+            } else {
+                toast.error(res.data.message)
+            }
+        } catch (error) {
+            console.log(error)
+            toast.error(error.message)
+        }
+    }
+
+    const placeOrderStripe = async (items, address, amount) => {
+        try {
+            const res = await axios.post(backendUrl + '/api/order/stripe', {items, address, amount}, {headers: {token}})
+
+
+            if (res.data.success){
+                window.location.replace(res.data.session_url)
+                toast(res.data.message)
+            } else {
+                toast.error(res.data.message)
+            }
+        } catch (error) {
+            console.log(error)
+            toast.error(error.message)
+        }
+    }
+    
+    const verifyOrderStripe = async (success, orderId) => {
+        try {
+            const res = await axios.post(backendUrl + '/api/order/verifyStripe', {success, orderId}, {headers: {token}})
+
+            // console.log(res.data)
+
+            if (res.data.success){
+                await clearCart()
+
+                router.push('/myorders')
+                toast(res.data.message)
+            } else {
+                toast.error(res.data.message)
+            }
+        } catch (error) {
+            console.log(error)
+            toast.error(error.message)
+        }
+    }
+
+    const getOrders = async () => {
+        try {
+            const res = await axios.post(backendUrl + '/api/order/userorders', {}, {headers: {token}})
+            let orderList = []
+
+            if (res.data.success){
+                setOrdersItems(res.data.orders)
+            } else {
+                toast.error(res.data.message)
+                
+            }
+            
+        } catch (error) {
+            console.log(error)
+            toast.error(error.message)
+        }
+    }
+
+    
 
     useEffect(() => {
-        if (!token && localStorage.getItem('token')) {
-            setToken(localStorage.getItem('token'))
-            // getCartUser(localStorage.getItem('token'))
+        setLoading(true);
+        getProductsData();
+    }, []);
+    
+    useEffect(() => {
+        const storedToken = localStorage.getItem('token');
+        if (!token && storedToken) {
+            setToken(storedToken);
+        }
+    }, [token]);
+    
+    useEffect(() => {
+        if (token && products.length > 0) {
+            getCartUser(token);
 
         }
-        if (token) {
-            getCartUser(localStorage.getItem('token'))
+    }, [token, products, updateCartCount]);
 
-        } else {
-            setTotalItems(0)
-            setCartItems({})
+    useEffect(() => {
+        if (token){
+            getOrders()
         }
-
-    }, [token, updateCartCount, products])
-
-
-
-
+    }, [token, cartItems])
 
 
     const value = {
@@ -204,17 +308,18 @@ const ShopContextProvider = (props) => {
         token, setToken, backendUrl,
         addToCart, totalItems, cartItems, getCartUser,
         updateCartCount, cartList, updateCart, deleteProduct,
-        totalAmount,
+        totalAmount, placeOrder, ordersItems, getOrders,
+        placeOrderStripe, verifyOrderStripe
     }
 
 
-    return (products.length > 0 ?
+    return (!loading ?
         <ShopContext.Provider value={value}>
             {props.children}
-        </ShopContext.Provider> :
-        <div className="flex items-center justify-center h-screen">
-            <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500 border-solid"></div>
-        </div>
+        </ShopContext.Provider> : ''
+        // <div className="flex items-center justify-center h-screen">
+        //     <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500 border-solid"></div>
+        // </div>
     )
 }
 

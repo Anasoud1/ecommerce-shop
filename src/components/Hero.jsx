@@ -5,7 +5,7 @@ import hero_img from "../../public/hero_img.png"
 
 const Hero = () => {
     return (
-        <div className="border border-black flex flex-col items-center justify-center md:flex-row">
+        <div className="border border-black flex flex-col items-center justify-center sm:flex-row">
             <div className="w-full sm:w-1/2 flex items-center justify-center py-10">
                 <div className='flex flex-col gap-y-2'>
                     <div className="flex items-center gap-4 ">
@@ -20,7 +20,11 @@ const Hero = () => {
                 </div>
 
             </div>
-            <Image src={hero_img} className='w-full md:w-1/2' priority alt="hero" />
+            {/* <div className='relative w-full sm:w-1/2 h-full'>
+                <Image src={hero_img} className='object-cover' fill sizes='50vw' priority alt="hero" />
+
+            </div> */}
+            <Image src={hero_img} className='w-full sm:w-1/2'  alt="hero" />
         </div>
     )
 }
