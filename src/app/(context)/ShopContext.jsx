@@ -23,9 +23,9 @@ const ShopContextProvider = (props) => {
 
     const [ordersItems, setOrdersItems] = useState([])
 
-    const [loading, setLoading] = useState(false);
     const router = useRouter()
-    
+
+
 
 
     const getProductsData = async () => {
@@ -42,8 +42,6 @@ const ShopContextProvider = (props) => {
             console.log(error)
             toast.error(error.message)
 
-        } finally {
-            setLoading(false);
         }
     }
 
@@ -101,6 +99,7 @@ const ShopContextProvider = (props) => {
 
                 }
             }
+
         } catch (error) {
             console.log(error)
             toast.error(error.message)
@@ -177,7 +176,7 @@ const ShopContextProvider = (props) => {
 
             }
 
-            const res = await axios.post(backendUrl + '/api/cart/delete', {newCartData}, { headers: { token } })
+            const res = await axios.post(backendUrl + '/api/cart/delete', { newCartData }, { headers: { token } })
 
             if (res.data.success) {
                 setCartItems(newCartData)
@@ -202,14 +201,14 @@ const ShopContextProvider = (props) => {
 
     const placeOrder = async (items, address, amount) => {
         try {
-            const res = await axios.post(backendUrl + '/api/order/place', {items, address, amount}, {headers: {token}})
+            const res = await axios.post(backendUrl + '/api/order/place', { items, address, amount }, { headers: { token } })
 
             // console.log(res.data)
 
-            if (res.data.success){
+            if (res.data.success) {
                 await clearCart()
                 router.push('/myorders')
-                
+
                 toast(res.data.message)
             } else {
                 toast.error(res.data.message)
@@ -222,10 +221,10 @@ const ShopContextProvider = (props) => {
 
     const placeOrderStripe = async (items, address, amount) => {
         try {
-            const res = await axios.post(backendUrl + '/api/order/stripe', {items, address, amount}, {headers: {token}})
+            const res = await axios.post(backendUrl + '/api/order/stripe', { items, address, amount }, { headers: { token } })
 
 
-            if (res.data.success){
+            if (res.data.success) {
                 window.location.replace(res.data.session_url)
                 toast(res.data.message)
             } else {
@@ -236,14 +235,14 @@ const ShopContextProvider = (props) => {
             toast.error(error.message)
         }
     }
-    
+
     const verifyOrderStripe = async (success, orderId) => {
         try {
-            const res = await axios.post(backendUrl + '/api/order/verifyStripe', {success, orderId}, {headers: {token}})
+            const res = await axios.post(backendUrl + '/api/order/verifyStripe', { success, orderId }, { headers: { token } })
 
             // console.log(res.data)
 
-            if (res.data.success){
+            if (res.data.success) {
                 await clearCart()
 
                 router.push('/myorders')
@@ -259,64 +258,70 @@ const ShopContextProvider = (props) => {
 
     const getOrders = async () => {
         try {
-            const res = await axios.post(backendUrl + '/api/order/userorders', {}, {headers: {token}})
-            let orderList = []
+            const res = await axios.post(backendUrl + '/api/order/userorders', {}, { headers: { token } })
 
-            if (res.data.success){
+            if (res.data.success) {
                 setOrdersItems(res.data.orders)
             } else {
                 toast.error(res.data.message)
-                
+
             }
-            
+
         } catch (error) {
             console.log(error)
             toast.error(error.message)
         }
     }
 
-    
+
 
     useEffect(() => {
-        setLoading(true);
         getProductsData();
+
     }, []);
-    
+
     useEffect(() => {
         const storedToken = localStorage.getItem('token');
+        console.log('token', token)
+
         if (!token && storedToken) {
             setToken(storedToken);
         }
     }, [token]);
-    
+
     useEffect(() => {
         if (token && products.length > 0) {
             getCartUser(token);
 
+        } else {
+            setCartItems({})
+            setTotalItems(0)
+            setCartList([])
         }
     }, [token, products, updateCartCount]);
 
     useEffect(() => {
-        if (token){
+        if (token) {
             getOrders()
         }
     }, [token, cartItems])
 
 
     const value = {
-        products, currency, delivery_fee,
+        products, setProducts, currency, delivery_fee,
         token, setToken, backendUrl,
         addToCart, totalItems, cartItems, getCartUser,
-        updateCartCount, cartList, updateCart, deleteProduct,
+        updateCartCount, setUpdateCartCount,
+        cartList, updateCart, deleteProduct,
         totalAmount, placeOrder, ordersItems, getOrders,
         placeOrderStripe, verifyOrderStripe
     }
 
 
-    return (!loading ?
+    return (
         <ShopContext.Provider value={value}>
             {props.children}
-        </ShopContext.Provider> : ''
+        </ShopContext.Provider>
         // <div className="flex items-center justify-center h-screen">
         //     <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500 border-solid"></div>
         // </div>

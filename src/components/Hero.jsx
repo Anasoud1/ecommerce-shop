@@ -24,7 +24,7 @@ const Hero = () => {
                 <Image src={hero_img} className='object-cover' fill sizes='50vw' priority alt="hero" />
 
             </div> */}
-            <Image src={hero_img} className='w-full sm:w-1/2'  alt="hero" />
+            <Image src={hero_img} className='w-full sm:w-1/2' priority alt="hero" />
         </div>
     )
 }

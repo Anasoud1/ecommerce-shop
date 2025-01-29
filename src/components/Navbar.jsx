@@ -6,27 +6,30 @@ import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 
 import React, { useContext, useEffect, useState } from 'react'
+import SearchBar from './SearchBar'
 
 const Navbar = () => {
 
     const [visible, setVisible] = useState(false)
+    const [userVisible, setUserVisible] = useState(false)
     const [searchBar, setSearchBar] = useState(false)
     const path = usePathname()
     const router = useRouter()
 
-    const {token, setToken, totalItems} = useContext(ShopContext)
+    const {token, setToken, totalItems, updateCartCount, setUpdateCartCount} = useContext(ShopContext)
 
     const handleLogout = () => {
         localStorage.clear()
         setToken(null)
-        console.log(path)
-
-    }
-    useEffect(() => {
-        if (!token && ['/cart', '/place-order', '/myorders'].includes(path)){
+        setUpdateCartCount(!updateCartCount)
+                
+        // console.log(path)
+        if (['/cart', '/place-order', '/myorders'].includes(path)){
             router.push('/login')
         }
-    }, [token])
+
+    }
+    
 
 
     return (
@@ -58,8 +61,8 @@ const Navbar = () => {
                 </ul>
                 <div className='flex items-center gap-4'>
                     <Image src={'/search.png'} width={20} height={20} alt='search' onClick={() => setSearchBar(true)} className='cursor-pointer'/>
-                    <Link href={'/cart'} className='cursor-pointer relative'>
-                        <Image src={'/cart.png'} width={20} height={20} alt='cart' />
+                    <Link href={token ? '/cart': '/login'} className='cursor-pointer relative'>
+                        <Image src={ '/cart.png'} width={20} height={20} alt='cart' />
                         <p className='absolute bg-black text-white bottom-[-5px] right-[-5px] rounded-full w-4 text-center aspect-square leading-4 text-[8px]'>{totalItems}</p>
                     </Link>
 
@@ -67,9 +70,9 @@ const Navbar = () => {
                         <button className='px-5 py-2 bg-black text-white rounded-full'>Login</button>
                     </Link>}
                     
-                    {token && <div className='group relative cursor-pointer'>
+                    {token && <div onClick={() => setUserVisible(!userVisible)} className='relative cursor-pointer'>
                         <Image src={'/user.png'} width={20} height={20} alt='user' />
-                        <div className='group-hover:block hidden dropdown-menu absolute right-0 '>
+                        <div className={`${userVisible ? 'block': 'hidden'}  dropdown-menu absolute right-0 `}>
                             <ul className='border bg-gray-100 mt-4 w-36 px-4 py-2 flex flex-col gap-y-2'>
                                 <li className='hover:font-semibold' >Profile</li>
                                 <Link href='/myorders'><li className='hover:font-semibold'>My orders</li></Link>
@@ -101,13 +104,7 @@ const Navbar = () => {
                 </ul>
 
             </div>
-            {searchBar && <div className='border-b bg-gray-50 flex justify-center items-center gap-x-4'>
-                <div className='px-6 py-2 border my-4 rounded-full w-2/3 md:w-[480px] bg-white flex  justify-between'>
-                    <input type="text" placeholder='Search' className='outline-none w-full'/>
-                    <Search/>
-                </div>
-                <X size={14} onClick={() => setSearchBar(false)} className='cursor-pointer'/>
-            </div>}
+            {searchBar && <SearchBar setSearchBar={setSearchBar}/>}
         </div>
 
     )

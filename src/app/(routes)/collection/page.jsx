@@ -6,15 +6,17 @@ import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import React, { useContext, useEffect, useState } from 'react'
 
-const Collection = () => {
+const Collection = ({query}) => {
 
   const [filterVisible, setFilterVisible] = useState(false)
   const router = useRouter()
-  const { products, currency } = useContext(ShopContext)
+  const { products, currency, setProducts } = useContext(ShopContext)
   const [category, setCategory] = useState([])
   const [subCategory, setSubCategory] = useState([])
   const [productFilter, setProductFilter] = useState(products.slice())
   const [sortType, setSortType] = useState('relevant')
+
+  
 
 
   const toogleCategory = (e) => {
@@ -57,6 +59,14 @@ const Collection = () => {
 
   const applyFilter = () => {
     let copyProduct = products.slice() 
+    
+    if (query) {
+      const newProduct = products.slice().filter(item => item.name.toLowerCase().includes(query))
+      if (newProduct.length){
+        copyProduct = newProduct
+      }
+  
+    }
 
     if (category.length > 0){
       copyProduct = copyProduct.filter(item => category.includes(item.category))
@@ -124,7 +134,7 @@ const Collection = () => {
       {/* ------- Right Side ------- */}
       <div>
         <div className='flex justify-between'>
-          <Title text1={'ALL'} text2={'COLLECTIONS'} />
+          <Title text1={'ALL'} text2={'COLLECTIONS'} size='text-base sm:text-2x' />
           <select name="" className='border px-4 py-2 text-sm' onChange={(e) => setSortType(e.target.value)}>
             <option value="relevant" >Sort by: Relevant</option>
             <option value="low to high">Sort by: Low to High</option>

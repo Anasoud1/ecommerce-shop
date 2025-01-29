@@ -2,14 +2,17 @@
 import { ShopContext } from '@/app/(context)/ShopContext'
 import Title from '@/components/Title'
 import Image from 'next/image'
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 
 const Myorders = () => {
 
-    const { ordersItems, currency } = useContext(ShopContext)
+    const { ordersItems, currency, getOrders } = useContext(ShopContext)
+    const [trackOrder, setTrackOrder] = useState(false)
 
     
-
+    useEffect(() => {
+        getOrders()
+    }, [trackOrder])
 
 
     return (
@@ -39,7 +42,7 @@ const Myorders = () => {
                                     <hr className='border w-[10px] h-[10px] bg-green-500 rounded-full' />
                                     <p>{item.status}</p>
                                 </div>
-                                <p className='border text-sm px-4 py-2 text-center max-w-[120px]'>Track Order</p>
+                                <p onClick={() => setTrackOrder(!trackOrder)} className='border text-sm px-4 py-2 text-center max-w-[120px] cursor-pointer'>Track Order</p>
 
                             </div>
 
