@@ -3,7 +3,7 @@ import Image from 'next/image'
 import React from 'react'
 
 export const metadata = {
-  title: "Contact US",
+  title: "Contact Us",
 };
 
 const Contact = () => {

@@ -1,43 +1,16 @@
-'use client'
-import { ShopContext } from '@/app/(context)/ShopContext'
-import Image from 'next/image'
-import { useRouter, useSearchParams } from 'next/navigation'
-import React, { useContext, useEffect, useState } from 'react'
-import Head from 'next/head'
+import React, { Suspense } from 'react'
+import Verify from './Verify'
 
+export const metadata = {
+  title: "Verify",
+};
 
-
-const Verify = () => {
-  const { verifyOrderStripe, token } = useContext(ShopContext)
-  const searchParams = useSearchParams()
-
-  const success = searchParams.get('success')
-  const orderId = searchParams.get('orderId')
-
-
-  useEffect(() => {
-    if (token) {
-      verifyOrderStripe(success, orderId)
-    }
-  }, [token])
-
-
+const VerifyPage = () => {
   return (
-
-    <div className="flex justify-center mt-20">
-      <div className="flex flex-col items-center gap-6">
-        <div className='relative w-[150px] min-h-[150px]'>
-          <Image src='/verified.gif' alt='check' fill sizes='50vw' className='object-contain' />
-
-        </div>
-        <h1 className="text-4xl font-extrabold mb-2">Payment Successfull</h1>
-        {/* <Link href='/' className='p-2 text-white font-bold rounded-md bg-green-600'>Go to Home</Link> */}
-
-      </div>
-    </div>
-
-
+    <Suspense>
+      <Verify />
+    </Suspense>
   )
 }
 
-export default Verify
+export default VerifyPage

@@ -4,6 +4,11 @@ import Footer from "@/components/Footer";
 import ShopContextProvider from "./(context)/ShopContext";
 import { ToastContainer } from "react-toastify";
 
+export const metadata = {
+  icons: {
+    icon: '/favicon.png',
+  },
+};
 
 export default function RootLayout({ children }) {
   return (
