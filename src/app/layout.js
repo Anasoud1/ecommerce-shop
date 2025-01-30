@@ -5,7 +5,6 @@ import ShopContextProvider from "./(context)/ShopContext";
 import { ToastContainer } from "react-toastify";
 
 
-
 export default function RootLayout({ children }) {
   return (
     <html lang="en">

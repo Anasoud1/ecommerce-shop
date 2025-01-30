@@ -4,8 +4,11 @@ import LatestCollection from "@/components/LatestCollection";
 import OurPolicy from "@/components/OurPolicy";
 import GlobalApi from "./(utils)/GlobalApi";
 
-export default async function  Home() {
+export const metadata = {
+  title: "Home",
+};
 
+export default async function  Home() {
   const productsList = await GlobalApi.getProductsData()
 
   return (

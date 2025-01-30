@@ -13,6 +13,7 @@ const ShopContextProvider = (props) => {
     const delivery_fee = 10
     const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL
     const [products, setProducts] = useState([])
+
     const [token, setToken] = useState(null)
     const [cartItems, setCartItems] = useState({})
 
@@ -22,11 +23,9 @@ const ShopContextProvider = (props) => {
     const [totalAmount, setTotalAmount] = useState(0)
 
     const [ordersItems, setOrdersItems] = useState([])
-
+    
     const router = useRouter()
-
-
-
+    
 
     const getProductsData = async () => {
         try {
@@ -143,7 +142,7 @@ const ShopContextProvider = (props) => {
         try {
             const res = await axios.post(backendUrl + '/api/cart/clearCart', {}, { headers: { token } })
 
-            console.log('res data: ', res.data)
+            console.log('res data cleaar: ', res.data)
             if (res.data.success) {
                 setCartList([])
                 setCartItems({})
@@ -277,7 +276,6 @@ const ShopContextProvider = (props) => {
 
     useEffect(() => {
         getProductsData();
-
     }, []);
 
     useEffect(() => {

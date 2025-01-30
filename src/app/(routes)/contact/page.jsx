@@ -2,6 +2,10 @@ import Title from '@/components/Title'
 import Image from 'next/image'
 import React from 'react'
 
+export const metadata = {
+  title: "Contact US",
+};
+
 const Contact = () => {
   return (
     <div className='pt-10'>

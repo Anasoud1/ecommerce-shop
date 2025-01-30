@@ -60,7 +60,8 @@ const Navbar = () => {
 
                 </ul>
                 <div className='flex items-center gap-4'>
-                    <Image src={'/search.png'} width={20} height={20} alt='search' onClick={() => setSearchBar(true)} className='cursor-pointer'/>
+                    {path !== '/login' && <Image src={'/search.png'} width={20} height={20} alt='search' onClick={() => setSearchBar(true)} className='cursor-pointer'/>}
+                    
                     <Link href={token ? '/cart': '/login'} className='cursor-pointer relative'>
                         <Image src={ '/cart.png'} width={20} height={20} alt='cart' />
                         <p className='absolute bg-black text-white bottom-[-5px] right-[-5px] rounded-full w-4 text-center aspect-square leading-4 text-[8px]'>{totalItems}</p>
@@ -104,7 +105,7 @@ const Navbar = () => {
                 </ul>
 
             </div>
-            {searchBar && <SearchBar setSearchBar={setSearchBar}/>}
+            {path !== '/login' && searchBar && <SearchBar setSearchBar={setSearchBar}/>}
         </div>
 
     )
