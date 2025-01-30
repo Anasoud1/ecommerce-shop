@@ -28,7 +28,7 @@ const Verify = () => {
           <Image src='/verified.gif' alt='check' fill sizes='50vw' className='object-contain' />
 
         </div>
-        <h1 className="text-4xl font-extrabold mb-2">Payment Successfull</h1>
+        <h1 className="text-center text-2xl sm:text-4xl font-extrabold mb-2 ">Payment Successfull</h1>
         {/* <Link href='/' className='p-2 text-white font-bold rounded-md bg-green-600'>Go to Home</Link> */}
 
       </div>
