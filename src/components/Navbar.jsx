@@ -75,7 +75,6 @@ const Navbar = () => {
                         <Image src={'/user.png'} width={20} height={20} alt='user' />
                         <div className={`${userVisible ? 'block': 'hidden'}  dropdown-menu absolute right-0 `}>
                             <ul className='border bg-gray-100 mt-4 w-36 px-4 py-2 flex flex-col gap-y-2'>
-                                <li className='hover:font-semibold' >Profile</li>
                                 <Link href='/myorders'><li className='hover:font-semibold'>My orders</li></Link>
                                 <li className='hover:font-semibold' onClick={() => handleLogout()}>Logout</li>
                             </ul>

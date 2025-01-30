@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import React, { useContext, useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import Head from 'next/head'
+import { LoaderIcon } from 'lucide-react'
 
 
 const Login = () => {
@@ -15,6 +16,7 @@ const Login = () => {
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [loading, setLoading] = useState(false)
 
     const router = useRouter()
 
@@ -22,6 +24,7 @@ const Login = () => {
         try {
             e.preventDefault()
             let res
+            setLoading(true)
             if (login == 'login') {
                 res = await axios.post(backendUrl + '/api/user/login', { name, email, password })
 
@@ -37,6 +40,7 @@ const Login = () => {
             } else {
                 toast.error(res.data.message)
             }
+            setLoading(false)
 
         } catch (error) {
             console.log(error)
@@ -79,8 +83,8 @@ const Login = () => {
 
                         </div>
                         <div className='flex justify-center mt-6'>
-                            {login === 'login' && <button className='px-8 py-2 bg-black text-white'>Login</button>}
-                            {login === 'sign up' && <button className='px-8 py-2 bg-black text-white'>Sign Up</button>}
+                            {login === 'login' && <button className='px-8 py-2 bg-black text-white w-[120px] flex justify-center'>{loading ? <LoaderIcon className='animate-spin'/> : 'Login'}</button>}
+                            {login === 'sign up' && <button className='px-8 py-2 bg-black text-white  w-[120px] flex justify-center'>{loading ? <LoaderIcon className='animate-spin'/> : 'Sign Up'}</button>}
                         </div>
                     </form>
                 </div>
