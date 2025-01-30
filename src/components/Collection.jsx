@@ -12,7 +12,7 @@ const Collection = ({ products, currency }) => {
       {products.map((item, index) => (
         <div onClick={() => router.push(`/product/${item._id}`)} key={index} className='cursor-pointer flex flex-col gap-y-1'>
           <div className='relative  min-h-[200px]'>
-            <Image src={item.image[0]} fill className='object-cover object-top' alt={item.name} sizes="300px" priority />
+            <Image src={item.image[0]} fill className='object-cover object-top' alt={item.name} sizes="300px" />
 
           </div>
           <p className='text-[14px] pt-2 text-gray-500'>{item.name}</p>
