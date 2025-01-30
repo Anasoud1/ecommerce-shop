@@ -32,7 +32,6 @@ const ShopContextProvider = (props) => {
             const res = await axios.get(backendUrl + '/api/product/list')
 
             if (res.data.success) {
-                // console.log(res.data.products)
                 setProducts(res.data.products)
             } else {
                 toast.error(res.data.message)
@@ -59,8 +58,6 @@ const ShopContextProvider = (props) => {
     const createNewListCart = (cartData) => {
         let cartList = []
         let countTotal = 0
-
-        // console.log(products)
 
 
         for (const itemId in cartData) {
@@ -142,7 +139,6 @@ const ShopContextProvider = (props) => {
         try {
             const res = await axios.post(backendUrl + '/api/cart/clearCart', {}, { headers: { token } })
 
-            console.log('res data cleaar: ', res.data)
             if (res.data.success) {
                 setCartList([])
                 setCartItems({})
@@ -202,7 +198,6 @@ const ShopContextProvider = (props) => {
         try {
             const res = await axios.post(backendUrl + '/api/order/place', { items, address, amount }, { headers: { token } })
 
-            // console.log(res.data)
 
             if (res.data.success) {
                 await clearCart()
@@ -239,7 +234,6 @@ const ShopContextProvider = (props) => {
         try {
             const res = await axios.post(backendUrl + '/api/order/verifyStripe', { success, orderId }, { headers: { token } })
 
-            // console.log(res.data)
 
             if (res.data.success) {
                 await clearCart()
@@ -280,7 +274,6 @@ const ShopContextProvider = (props) => {
 
     useEffect(() => {
         const storedToken = localStorage.getItem('token');
-        console.log('token', token)
 
         if (!token && storedToken) {
             setToken(storedToken);
